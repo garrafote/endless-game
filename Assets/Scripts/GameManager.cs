@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
 
-    GameObject[][] blocks;
+    GameObject[] blocks;
     List<Block> movingBlocks;
 
     float distance = 0;
@@ -21,35 +21,16 @@ public class GameManager : MonoBehaviour {
 
         // group and order blocks by level
         // select block arrays
-        blocks = resBlocks.GroupBy((System.Func<GameObject, string>)GroupByLevel).OrderBy(g => g.Key).Select(g => g.ToArray()).ToArray();
+        blocks = resBlocks.OrderBy(g => g.name).ToArray();
 
-        SpawnBlock(0);
-        SpawnBlock(20);
-        SpawnBlock(40);
+        SpawnBlock(1,0);
+        SpawnBlock(1,20);
+        SpawnBlock(1,40);
     }
 
-    string GroupByLevel(GameObject t)
+    void SpawnBlock(int blockIndex, float position = 40)
     {
-        const string pattern = @"Block (?<level>\d+) \d+";
-        
-        var match = Regex.Match(t.name, pattern);
-
-        if (!match.Success)
-        {
-            return "99999";
-        }
-
-        Debug.Log(match.Groups["level"].Value);
-
-        return match.Groups["level"].Value;
-    }
-
-    void SpawnBlock(float position = 40)
-    {
-        var levelBlocks = blocks[0];
-        var index = Random.Range(0, levelBlocks.Length);
-
-        var go = GameObject.Instantiate(levelBlocks[index], new Vector3(position, 0, 0), Quaternion.identity) as GameObject;
+        var go = GameObject.Instantiate(blocks[blockIndex], new Vector3(position, 0, 0), Quaternion.identity) as GameObject;
 
         var block = go.GetComponent<Block>();
 
@@ -77,12 +58,11 @@ public class GameManager : MonoBehaviour {
             Destroy(blockToRemove.gameObject);
         }
 
-        distance += deltaDistance;
+        Event e = Event.current;
+        if(e != null)
+            Debug.Log((int)e.character);
 
-        if (distance > targetDistance)
-        {
-            SpawnBlock();
-            targetDistance += 20;
-        }
     }
+
+
 }
