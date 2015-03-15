@@ -39,8 +39,6 @@ public class GameManager : MonoBehaviour {
             return "99999";
         }
 
-        Debug.Log(match.Groups["level"].Value);
-
         return match.Groups["level"].Value;
     }
 
