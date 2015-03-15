@@ -72,13 +72,24 @@ public class GameManager : MonoBehaviour {
 
     void Update()
     {
-        for (int i = 0; i < blocks.Length; i++)
-        {
-            if (Input.GetKeyDown(i.ToString()))
-            {
-                nextBlockID = i;
-                //SpawnBlock(i, lastBlock.transform.position.x + 20.0f);
-            }
-        }
+		if (nextBlockID == -1)
+		{
+			UIManager.Instance.canUse = true;
+			for (int i = 0; i < blocks.Length; i++)
+			{
+				if (Input.GetKeyDown(i.ToString()))
+				{
+					if (UIManager.Instance.Abilities[(i - 1)].UseAbility())
+					{
+						nextBlockID = i;
+
+					}
+				}
+			}
+		}
+		else
+		{
+			UIManager.Instance.canUse = false;
+		}
     }
 }
