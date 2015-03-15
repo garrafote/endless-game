@@ -2,29 +2,12 @@
 using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class CharacterController2D : ITarget {
+public class CharacterController2D : MonoBehaviour {
 
     private Vector2 jumpForce = new Vector2(0, 25);
 
-    Queue<float> memory;
-
-    public override float pos
-    {
-        get
-        {
-            return memory.Peek();
-        }
-    }
-
 	// Use this for initialization
 	void Awake () {
-        memory = new Queue<float>();
-
-        for (int i = 0; i < 20; i++)
-        {
-            memory.Enqueue(transform.position.y);
-        }
-
 
 	}
 	
@@ -32,7 +15,16 @@ public class CharacterController2D : ITarget {
 	void Update () {
         
         // TODO: get collider to enable double jump
-        var col = Physics2D.BoxCast((Vector2)transform.position + new Vector2(0, -0.5f), new Vector2(1, 0.1f), 0, -Vector2.up, 0.01f, Physics2D.IgnoreRaycastLayer);
+
+        var pos = (Vector2)transform.position;
+
+        var hit = Physics2D.OverlapArea(
+            pointA: pos + new Vector2(-0.5f, -0.5f),
+            pointB: pos + new Vector2( 0.5f,  0.0f),
+            layerMask: (1 << LayerMask.NameToLayer("Platform")));
+
+        // it is grounded if is touching any platform
+        var isGrounded = hit != null;
 
         var jump = Input.GetButtonDown("Jump");
 
@@ -49,16 +41,13 @@ public class CharacterController2D : ITarget {
 
         if (jump) 
         {
-               
             // apply force
             rigidbody2D.AddForce(jumpForce, ForceMode2D.Impulse);
         }
 
-
     }
 
     void FixedUpdate() {
-        memory.Dequeue();
-        memory.Enqueue(transform.position.y);
-	}
+	
+    }
 }
