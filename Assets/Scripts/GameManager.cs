@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour {
 
     void SpawnBlock(int blockIndex, float position = 40)
     {
-        var go = GameObject.Instantiate(blocks[blockIndex], new Vector3(position, 0, 0), Quaternion.identity) as GameObject;
+        var go = GameObject.Instantiate(blocks[blockIndex], new Vector3(position, 2f, 0), Quaternion.identity) as GameObject;
 
         var block = go.GetComponent<Block>();
 
