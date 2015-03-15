@@ -10,11 +10,12 @@ public class GameManager : MonoBehaviour {
 
     float distance = 0;
     float targetDistance = 20;
-
-
+    private GameObject lastBlock;
+    int nextBlockID;
 
     void Awake()
     {
+        nextBlockID = -1;
         movingBlocks = new List<Block>();
 
         var resBlocks = Resources.LoadAll<GameObject>("Blocks");
@@ -25,7 +26,6 @@ public class GameManager : MonoBehaviour {
 
         SpawnBlock(1,0);
         SpawnBlock(1,20);
-        SpawnBlock(1,40);
     }
 
     void SpawnBlock(int blockIndex, float position = 40)
@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour {
         var go = GameObject.Instantiate(blocks[blockIndex], new Vector3(position, 0, 0), Quaternion.identity) as GameObject;
 
         var block = go.GetComponent<Block>();
+
+        lastBlock = go;
 
         movingBlocks.Add(block);
     }
@@ -58,11 +60,25 @@ public class GameManager : MonoBehaviour {
             Destroy(blockToRemove.gameObject);
         }
 
-        Event e = Event.current;
-        if(e != null)
-            Debug.Log((int)e.character);
+        distance += deltaDistance;
+        if( distance > targetDistance && nextBlockID >= 0)
+        {
+            SpawnBlock(nextBlockID, lastBlock.transform.position.x + 20.0f);
+            targetDistance += 20;
 
+            nextBlockID = -1;
+        }
     }
 
-
+    void Update()
+    {
+        for (int i = 0; i < blocks.Length; i++)
+        {
+            if (Input.GetKeyDown(i.ToString()))
+            {
+                nextBlockID = i;
+                //SpawnBlock(i, lastBlock.transform.position.x + 20.0f);
+            }
+        }
+    }
 }
