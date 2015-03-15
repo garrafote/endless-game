@@ -17,7 +17,7 @@ public class Block : MonoBehaviour {
     {
         Gizmos.color = Color.green;
 
-        Gizmos.DrawWireCube(transform.position, new Vector3(20, 20, 1));
+        Gizmos.DrawWireCube(transform.position, new Vector3(20 , 20, 1));
     }
 
 
