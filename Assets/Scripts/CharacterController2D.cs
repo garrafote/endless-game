@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class CharacterController2D : MonoBehaviour {
 
     private Vector2 jumpForce = new Vector2(0, 25);
+    private bool hasExtraJump;
 
 	// Use this for initialization
 	void Awake () {
@@ -14,8 +15,6 @@ public class CharacterController2D : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         
-        // TODO: get collider to enable double jump
-
         var pos = (Vector2)transform.position;
 
         var hit = Physics2D.OverlapArea(
@@ -25,17 +24,18 @@ public class CharacterController2D : MonoBehaviour {
 
         // it is grounded if is touching any platform
         var isGrounded = hit != null;
+        
+        // reeset extra jump whenever player hits the ground
+        if (isGrounded) hasExtraJump = true;
 
-        var jump = Input.GetButtonDown("Jump");
+        var jumpPressed = Input.GetButtonDown("Jump");
+        var jump = jumpPressed && (isGrounded || hasExtraJump);
 
         var vel = rigidbody2D.velocity;
         vel.x = 0;
 
-        if (jump)
-        {
-            //clear vertical velocity
-            vel.y = 0;
-        }
+        // clear vertical velocity if player is about to jump
+        if (jump) vel.y = 0;
 
         rigidbody2D.velocity = vel;
 
@@ -43,6 +43,9 @@ public class CharacterController2D : MonoBehaviour {
         {
             // apply force
             rigidbody2D.AddForce(jumpForce, ForceMode2D.Impulse);
+            
+            // burn extra jump if was not grounded
+            if (!isGrounded) hasExtraJump = false;
         }
 
     }
