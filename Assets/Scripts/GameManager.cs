@@ -63,8 +63,15 @@ public class GameManager : MonoBehaviour {
         distance += deltaDistance;
         if( distance > targetDistance && nextBlockID >= 0)
         {
-            SpawnBlock(nextBlockID, lastBlock.transform.position.x + 20.0f);
-            targetDistance += 20;
+			if (movingBlocks.Count != 0)
+			{
+				SpawnBlock(nextBlockID, lastBlock.transform.position.x + 20.0f);
+			}
+			else
+			{
+				SpawnBlock(nextBlockID, 0.0f);
+			}
+			targetDistance += 20;
 
             nextBlockID = -1;
         }
