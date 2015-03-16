@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour {
     GameObject[] blocks;
     List<Block> movingBlocks;
 
+    [SerializeField]
+    GameObject tokenPrefab;
+
     float distance = 0;
     float targetDistance = 20;
     private GameObject lastBlock;
@@ -24,11 +27,11 @@ public class GameManager : MonoBehaviour {
         // select block arrays
         blocks = resBlocks.OrderBy(g => g.name).ToArray();
 
-        SpawnBlock(1,0);
-        SpawnBlock(1,20);
+        SpawnBlock(1,0, false);
+        SpawnBlock(1,20, false);
     }
 
-    void SpawnBlock(int blockIndex, float position = 40)
+    void SpawnBlock(int blockIndex, float position = 40, bool addToken = true)
     {
         var go = GameObject.Instantiate(blocks[blockIndex], new Vector3(position, 2f, 0), Quaternion.identity) as GameObject;
 
@@ -36,7 +39,23 @@ public class GameManager : MonoBehaviour {
 
         lastBlock = go;
 
+        if (addToken && Random.Range(0.0f, 1.0f) < .4f)
+        {
+            AddToken(go);
+        }
+
         movingBlocks.Add(block);
+    }
+
+    void AddToken(GameObject go)
+    {
+        var tokenList = go.transform.FindChild("Token");
+
+        var index = Random.Range(0, tokenList.childCount);
+        var tokenContainer = tokenList.GetChild(index);
+
+        var token = (GameObject)Instantiate(tokenPrefab, tokenContainer.position, Quaternion.identity);
+        token.transform.parent = tokenContainer;
     }
 
     void FixedUpdate()

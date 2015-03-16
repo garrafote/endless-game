@@ -17,9 +17,18 @@ public class CharacterController2D : MonoBehaviour {
         
         var pos = (Vector2)transform.position;
 
+        // check death state
+        if (pos.y < -10)
+        {
+            Destroy(gameObject);
+            // TODO: death screen
+            Application.LoadLevel(Application.loadedLevel);
+            return;
+        }
+
         var hit = Physics2D.OverlapArea(
-            pointA: pos + new Vector2(-0.5f, -0.5f),
-            pointB: pos + new Vector2( 0.5f,  0.0f),
+            pointA: pos + new Vector2(-0.45f, -0.5f),
+            pointB: pos + new Vector2( 0.45f,  0.0f),
             layerMask: (1 << LayerMask.NameToLayer("Platform")));
 
         // it is grounded if is touching any platform
