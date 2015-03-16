@@ -45,6 +45,9 @@ public class UIManager : Singleton<UIManager>
 		//pause_Menu = GameObject.Find("Pause Menu").GetComponent<Canvas>();
 
 		Icons = new Sprite[10];
+
+		Icons = Resources.LoadAll<Sprite>("Abilities");
+
 		//Icons = Resources.LoadAll<Sprite>("Icons/");
 
 		GameObject abilityFolder = UIROOT.transform.FindChild("Abilities").gameObject;
@@ -57,21 +60,37 @@ public class UIManager : Singleton<UIManager>
 			newAbilityGO = (GameObject)GameObject.Instantiate(AbilityIconPrefab, Vector3.zero, Quaternion.identity);
 
 			newAbilityGO.transform.SetParent(abilityFolder.transform);
-			newAbilityGO.transform.position = new Vector3(i * 64, 64, 0);
+			newAbilityGO.transform.position = new Vector3(i * 65, 65, 0);
 			newAbilityGO.name = "Ability (" + (i + 1) % 10 + ")";
 
 			newAbility.index = i;
-			newAbility.cooldownDuration = Random.Range(3, 15);
-			newAbility.charges = Random.Range(4, 15);
-			newAbility.cooldownLeft = 0;
-			if(i == 0)
-			{ newAbility.unlimited = true; }
+			if (i == 0)
+			{ 
+				newAbility.charges = 999999;
+				newAbility.unlimited = true;
+				newAbility.cooldownDuration = Random.Range(8, 15);
+			}
 			else
-			{ newAbility.unlimited = false; }
+			{
+				newAbility.cooldownDuration = 10;
+				newAbility.charges = Random.Range(4, 15);
+				newAbility.unlimited = false;
+			
+			}
+			
+			newAbility.cooldownLeft = 0;
+			
 			newAbility.AbilityContainer = newAbilityGO;
-			newAbility.AbilityContainerImage = newAbilityGO.GetComponent<Image>();
+			newAbility.AbilityBackground = newAbilityGO.transform.FindChild("Background").GetComponent<Image>();
+			newAbility.AbilityIcon = newAbilityGO.transform.FindChild("AbilityIcon").GetComponent<Image>();
+
+			newAbility.AbilityIcon.sprite = Icons[i];
+			newAbility.AbilityBackground.sprite = Icons[11];
 			newAbility.CooldownDisplay = newAbilityGO.transform.FindChild("Cooldown").GetComponent<Image>();
+			newAbility.CooldownDisplay.sprite = Icons[11];
+			
 			newAbility.ChargeDisplay = newAbilityGO.transform.FindChild("Remainder").GetComponent<Text>();
+			newAbility.ChargeDisplay.text = newAbility.charges.ToString();
 
 			Abilities.Add(newAbility);
 		}
@@ -131,7 +150,6 @@ public class UIManager : Singleton<UIManager>
 #endif
 		}
 	}
-
 
 	public void PauseGame()
 	{

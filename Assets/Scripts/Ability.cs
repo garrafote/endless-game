@@ -8,7 +8,11 @@ public class Ability : ScriptableObject
 	//Charges Display
 
 	public GameObject AbilityContainer;
-	public Image AbilityContainerImage;
+
+	public Image AbilityBackground;
+	public Image AbilityIcon;
+
+
 	public int index;
 	public Text ChargeDisplay;
 	public Image CooldownDisplay;
@@ -67,12 +71,18 @@ public class Ability : ScriptableObject
 
 	public void DisableAbility()
 	{
-		AbilityContainerImage.color = new Color(.3f, .3f, .3f, .3f);
+		AbilityBackground.sprite = UIManager.Instance.Icons[10];
 	}
 
 	public void EnableAbility()
 	{
-		AbilityContainerImage.color = new Color(.8f, .8f, .8f, .4f);
+		AbilityBackground.sprite = UIManager.Instance.Icons[11];
+	}
+
+	public void IncrementCharge(int amountGained)
+	{
+		charges += amountGained;
+		SetCharges(charges);
 	}
 
 	public void SetCharges(int amount)
