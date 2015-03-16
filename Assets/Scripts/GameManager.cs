@@ -86,7 +86,17 @@ public class GameManager : MonoBehaviour {
 			{
 				if (Input.GetKeyDown(i.ToString()))
 				{
-					if (UIManager.Instance.Abilities[(i - 1)].UseAbility())
+					int val = i;
+					if(i == 0)
+					{
+						val = 9;
+					}
+					else
+					{
+						val = i - 1;
+					}
+
+					if (UIManager.Instance.Abilities[val].UseAbility())
 					{
 						nextBlockID = i;
 
