@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour {
 
         lastBlock = go;
 
-        if (addToken && Random.Range(0.0f, 1.0f) < .4f)
+        if (addToken && Random.Range(0.0f, 1.0f) < 1f)
         {
             AddToken(go);
         }
@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour {
         var index = Random.Range(0, tokenList.childCount);
         var tokenContainer = tokenList.GetChild(index);
 
-        var token = (GameObject)Instantiate(tokenPrefab, tokenContainer.position, Quaternion.identity);
+        var token = (GameObject)Instantiate(tokenPrefab, tokenContainer.position + Vector3.up * .2f, Quaternion.identity);
         token.transform.parent = tokenContainer;
     }
 

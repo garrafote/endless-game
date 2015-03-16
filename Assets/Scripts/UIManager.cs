@@ -24,15 +24,20 @@ public class UIManager : Singleton<UIManager>
 	{
 		base.Awake();
 
+		
+	}
+
+	public void Init()
+	{
 		Abilities = new List<Ability>();
 
 		//Load the UI element
-		
+
 		AbilityIconPrefab = Resources.Load<GameObject>("UI/AbilityIcon");
 		ScreenSpaceOverlayPrefab = Resources.Load<GameObject>("UI/SS - Overlay");
 
 		GameObject go = GameObject.Find("SS - Overlay");
-		if(go != null)
+		if (go != null)
 		{
 			UIROOT = go.GetComponent<Canvas>();
 		}
@@ -41,7 +46,7 @@ public class UIManager : Singleton<UIManager>
 			UIROOT = ((GameObject)GameObject.Instantiate(ScreenSpaceOverlayPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Canvas>();
 			UIROOT.gameObject.name = ScreenSpaceOverlayPrefab.name;
 		}
-	
+
 		//pause_Menu = GameObject.Find("Pause Menu").GetComponent<Canvas>();
 
 		Icons = new Sprite[10];
@@ -65,7 +70,7 @@ public class UIManager : Singleton<UIManager>
 
 			newAbility.index = i;
 			if (i == 0)
-			{ 
+			{
 				newAbility.charges = 999999;
 				newAbility.unlimited = true;
 				newAbility.cooldownDuration = Random.Range(8, 15);
@@ -73,13 +78,13 @@ public class UIManager : Singleton<UIManager>
 			else
 			{
 				newAbility.cooldownDuration = 10;
-				newAbility.charges = Random.Range(4, 15);
+				newAbility.charges = Random.Range(0, 5);
 				newAbility.unlimited = false;
-			
+
 			}
-			
+
 			newAbility.cooldownLeft = 0;
-			
+
 			newAbility.AbilityContainer = newAbilityGO;
 			newAbility.AbilityBackground = newAbilityGO.transform.FindChild("Background").GetComponent<Image>();
 			newAbility.AbilityIcon = newAbilityGO.transform.FindChild("AbilityIcon").GetComponent<Image>();
@@ -88,21 +93,14 @@ public class UIManager : Singleton<UIManager>
 			newAbility.AbilityBackground.sprite = Icons[11];
 			newAbility.CooldownDisplay = newAbilityGO.transform.FindChild("Cooldown").GetComponent<Image>();
 			newAbility.CooldownDisplay.sprite = Icons[11];
-			
+
 			newAbility.ChargeDisplay = newAbilityGO.transform.FindChild("Remainder").GetComponent<Text>();
 			newAbility.ChargeDisplay.text = newAbility.charges.ToString();
 
 			Abilities.Add(newAbility);
 		}
-	}
 
-	void Start()
-	{
-		if (pause_Menu != null)
-		{
-			pause_Menu.gameObject.SetActive(false);
-			UnpauseGame();
-		}
+		UnpauseGame();
 	}
 
 	bool wasFullScreen;

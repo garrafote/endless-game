@@ -79,7 +79,7 @@ public class Ability : ScriptableObject
 		AbilityBackground.sprite = UIManager.Instance.Icons[11];
 	}
 
-	public void IncrementCharge(int amountGained)
+	public void IncrementCharge(int amountGained = 1)
 	{
 		charges += amountGained;
 		SetCharges(charges);

@@ -8,7 +8,7 @@ public class Token : MonoBehaviour {
 
 	void Start () {
         ui = UIManager.Instance;
-        abilityIndex = Random.Range(0, 10) + 1;
+        abilityIndex = Random.Range(1, 10) + 1;
         Debug.Log("Ability/" + (abilityIndex % 10).ToString("00"));
         var sprite = Resources.Load<Sprite>("Abilities/" + (abilityIndex % 10).ToString("00"));
         var srenderer = transform.FindChild("Sprite").GetComponent<SpriteRenderer>();
@@ -19,7 +19,7 @@ public class Token : MonoBehaviour {
     {
         if (other.name == "Player")
         {
-            ui.Abilities[0].charges += 1;
+			ui.Abilities[abilityIndex-1].IncrementCharge();
         }
 
         Destroy(gameObject);
